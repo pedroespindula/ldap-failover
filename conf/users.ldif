@@ -63,8 +63,8 @@ entryCSN: 20170216191133.425734Z#000000#000#000000
 modifiersName: cn=admin,dc=lsd,dc=ufcg,dc=edu,dc=br
 modifyTimestamp: 20170216191133Z
 
-dn: cn=pedro,ou=users,dc=lsd,dc=ufcg,dc=edu,dc=br
-cn: pedro
+dn: cn=Joao Pedro Santino Espindula,ou=users,dc=lsd,dc=ufcg,dc=edu,dc=br
+cn: Joao Pedro Santino Espindula
 uid: joao.espindula
 sn: Espindula
 givenName: Joao Pedro Santino Espindula

@@ -1,0 +1,10 @@
+version: '2'
+services:
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "lsd-ldap-load-balancer-112465a2c4996a0c.elb.us-east-1.amazonaws.com "
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8080:80"

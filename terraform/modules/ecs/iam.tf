@@ -1,9 +1,18 @@
-resource "aws_iam_role" "this" {
+resource "aws_iam_role" "execution" {
   name               = "${var.name}-iam-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 
   tags = merge(var.aws_tags, {
-    Name = "${var.name}-iam-role"
+    Name = "${var.name}-execution-iam-role"
+  })
+}
+
+resource "aws_iam_role" "task" {
+  name               = "${var.name}-task-iam-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+
+  tags = merge(var.aws_tags, {
+    Name = "${var.name}-task-iam-role"
   })
 }
 
@@ -19,7 +28,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  role       = aws_iam_role.this.name
+  role       = aws_iam_role.execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 

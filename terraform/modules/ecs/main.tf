@@ -12,21 +12,26 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = ["FARGATE"]
   memory                   = var.memory
   cpu                      = var.cpu
-  execution_role_arn       = aws_iam_role.this.arn
+  execution_role_arn       = aws_iam_role.execution.arn
   container_definitions = jsonencode([
     {
       "name" : var.name,
-      "image" : aws_ecr_repository.this.repository_url,
+      "image" : var.repository_url,
       "memory" : var.memory,
       "cpu" : var.cpu,
       "essential" : true,
-      "portMappings" : [
-        {
-          "containerPort" : var.port,
-          "hostPort" : var.port
+      "portMappings" : [for i, port in var.ports : { "containerPort" : port, "hostPort" : port }]
+      "task_role_arn" : aws_iam_role.task.arn,
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-group" : "${var.name}-container",
+          "awslogs-region" : "us-east-1",
+          "awslogs-create-group" : "true",
+          "awslogs-stream-prefix" : "${var.name}"
         }
-      ]
-    }
+      }
+    },
   ])
 
   tags = merge(var.aws_tags, {
@@ -46,10 +51,14 @@ resource "aws_ecs_service" "this" {
     security_groups  = [aws_security_group.this.id]
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
-    container_name   = var.name
-    container_port   = var.port
+  dynamic "load_balancer" {
+    for_each = var.ports
+    iterator = port
+    content {
+      target_group_arn = aws_lb_target_group.this[port.value].arn
+      container_name   = var.name
+      container_port   = port.value
+    }
   }
 
   desired_count = 1
@@ -61,15 +70,18 @@ resource "aws_ecs_service" "this" {
 
 resource "aws_security_group" "this" {
   name        = "${var.name}-security-group"
-  description = "Allow ${var.port} inbound traffic"
+  description = "Allow ${join(",", var.ports)} inbound traffic"
   vpc_id      = var.vpc_id
 
-
-  ingress {
-    from_port   = var.port
-    to_port     = var.port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = var.ports
+    iterator = port
+    content {
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
   egress {

@@ -4,7 +4,11 @@ services:
   ldap:
     build: .
     ports:
-      - 389:389
+      - 389:389 
+      - 638:638 
+    environment:
+      AWS_SECRET_ACCESS_KEY: jaaaMh299IEIM0UfxW1qRDe5k8H02fudQaOafacg
+      AWS_ACCESS_KEY_ID: AKIAYCLMRRWBSG7ARRME
  
   phpldapadmin:
     image: osixia/phpldapadmin:latest

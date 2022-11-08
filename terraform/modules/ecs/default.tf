@@ -10,8 +10,8 @@ variable "cpu" {
   default     = 512
 }
 
-variable "port" {
+variable "ports" {
   description = "Port that will be binded on the host to expose the service"
-  type        = number
-  default     = 80
+  type        = list(number)
+  default     = [80]
 }

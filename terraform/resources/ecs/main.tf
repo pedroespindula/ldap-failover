@@ -6,7 +6,9 @@ module "ecs" {
   vpc_id     = local.context[terraform.workspace].vpc.id
   subnet_ids = local.context[terraform.workspace].subnets.ids
 
-  port = 389
+  ports = [389, 636]
+
+  repository_url = local.context[terraform.workspace].repository_url
 
   aws_tags = local.context[terraform.workspace].tags
 }

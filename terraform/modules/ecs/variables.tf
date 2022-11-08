@@ -23,6 +23,12 @@ variable "subnet_ids" {
   }
 }
 
+variable "repository_url" {
+  description = "URL for the repository that will be used as the task image"
+  type        = string
+}
+
+
 variable "aws_tags" {
   description = "AWS tags that will be shared bettween the deployed resources"
   type = object({

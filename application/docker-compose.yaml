@@ -7,8 +7,8 @@ services:
       - 389:389 
       - 638:638 
     environment:
-      AWS_SECRET_ACCESS_KEY: jaaaMh299IEIM0UfxW1qRDe5k8H02fudQaOafacg
-      AWS_ACCESS_KEY_ID: AKIAYCLMRRWBSG7ARRME
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
  
   phpldapadmin:
     image: osixia/phpldapadmin:latest

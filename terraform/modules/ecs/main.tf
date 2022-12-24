@@ -13,6 +13,7 @@ resource "aws_ecs_task_definition" "this" {
   memory                   = var.memory
   cpu                      = var.cpu
   execution_role_arn       = aws_iam_role.execution.arn
+  task_role_arn            = aws_iam_role.task.arn
   container_definitions = jsonencode([
     {
       "name" : var.name,
@@ -21,7 +22,6 @@ resource "aws_ecs_task_definition" "this" {
       "cpu" : var.cpu,
       "essential" : true,
       "portMappings" : [for i, port in var.ports : { "containerPort" : port, "hostPort" : port }]
-      "task_role_arn" : aws_iam_role.task.arn,
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "execution" {
-  name               = "${var.name}-iam-role"
+  name               = "${var.name}-execution-iam-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 
   tags = merge(var.aws_tags, {

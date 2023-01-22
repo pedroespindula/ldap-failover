@@ -6,11 +6,11 @@ SUCCESS=0
 ERROR=1
 
 TIMEOUT=1
-LDAP_PORT=389
 
-echo "Detecting LDAP failure on host ${LDAP_HOST}"
-result=$(nc -vz -w ${TIMEOUT} ${LDAP_HOST} ${LDAP_PORT} &> /dev/null && echo ${SUCCESS} || echo ${ERROR})
-# result=$(ldapsearch -x -H "ldap://${LDAP_HOST}" -b "${LDAP_QUERY}" -l $TIMEOUT -LLL && echo ${SUCCESS} || echo ${ERROR})
+echo "VERSION: 1.1.0"
+
+echo "Detecting LDAP failure on host ${LDAP_HOST} on port ${LDAP_PORT}"
+result=$(ldapsearch -x -H "ldap://${LDAP_HOST}:${LDAP_PORT}" -b "${LDAP_QUERY}" -l $TIMEOUT -LLL &> /dev/null && echo ${SUCCESS} || echo ${ERROR})
 
 if [ $result -eq ${ERROR} ] 
 then

@@ -22,6 +22,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   ldap-utils \
  && rm -rf /var/lib/apt/lists/*
 
+COPY ./terraform/ ./terraform
+
 COPY ./detect-fail.sh .
 
 CMD ["./detect-fail.sh"]

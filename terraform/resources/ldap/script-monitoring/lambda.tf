@@ -20,10 +20,17 @@ resource "aws_lambda_function" "this" {
 
   image_uri = "${data.terraform_remote_state.repository.outputs.repository_url}:latest"
 
+  memory_size = 1024
+  timeout     = 600
+
+  ephemeral_storage {
+    size = 1024
+  }
+
   environment {
     variables = {
       "LDAP_HOST" : "0.tcp.sa.ngrok.io",
-      "LDAP_PORT" : "11952"
+      "LDAP_PORT" : "15017"
       "LDAP_QUERY" : "ou=users,dc=lsd,dc=ufcg,dc=edu,dc=br"
     }
   }

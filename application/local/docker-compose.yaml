@@ -1,11 +1,12 @@
 version: "3"
 
 services:
-  backup:
+  ldap:
     build: .
-    env_file: .env
+    ports:
+      - 389:389 
+      - 638:638 
 
 networks:
-  ldap_network:
+  default:
     name: ldap_network
-    external: true

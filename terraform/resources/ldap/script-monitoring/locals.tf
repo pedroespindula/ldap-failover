@@ -1,0 +1,6 @@
+locals {
+  context = {
+    default = {
+    }
+  }
+}

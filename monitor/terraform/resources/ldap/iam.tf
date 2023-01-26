@@ -1,6 +1,6 @@
 resource "aws_iam_role_policy_attachment" "ecs-role-attachment-allow-lsd-ldap-read-bucket-access" {
   role       = module.ecs.iam_role_task.name
-  policy_arn = data.terraform_remote_state.backup-bucket.outputs.read_policy_arn
+  policy_arn = data.terraform_remote_state.backup-bucket.outputs.backup_policy_arn
 }
 
 # ALLOW LOGS ON ECS

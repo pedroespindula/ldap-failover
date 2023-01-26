@@ -30,7 +30,7 @@ resource "aws_lambda_function" "this" {
   environment {
     variables = {
       "LDAP_HOST" : "0.tcp.sa.ngrok.io",
-      "LDAP_PORT" : "15017"
+      "LDAP_PORT" : "17752"
       "LDAP_QUERY" : "ou=users,dc=lsd,dc=ufcg,dc=edu,dc=br"
     }
   }

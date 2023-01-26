@@ -7,7 +7,19 @@ ERROR=1
 
 TIMEOUT=1
 
-echo "VERSION: 1.2.0"
+next-lambda-invocation() {
+  REQUEST_ID=$(curl -X GET -sI "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/next" | awk -v FS=": " '/^Lambda-Runtime-Aws-Request-Id/{print $2}')
+
+  echo "REQUEST_ID: ${REQUEST_ID}"
+
+  URL="http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/${REQUEST_ID%$'\r'}/response"
+
+  echo "URL: ${URL}"
+
+  curl -X POST "$URL" -d "SUCCESS"
+}
+
+echo "VERSION: 1.3.2"
 
 echo "Detecting LDAP failure on host ${LDAP_HOST} on port ${LDAP_PORT}"
 result=$(ldapsearch -x -H "ldap://${LDAP_HOST}:${LDAP_PORT}" -b "${LDAP_QUERY}" -l $TIMEOUT -LLL &> /dev/null && echo ${SUCCESS} || echo ${ERROR})
@@ -23,10 +35,13 @@ then
   # cd /home/pedro/repos/ufcg/tcc/ldap/application/terraform/applications/ecs
   # terraform apply -auto-approve
   echo "Creation finished!"
-  RESPONSE="{\"statusCode\": 200, \"body\": \"Creation Finished\"}"
-  echo $RESPONSE
 else
   echo "Application is running OK!"
-  RESPONSE="{\"statusCode\": 200, \"body\": \"Application is running OK!\"}"
-  echo $RESPONSE
 fi
+
+if [ ! -z "${AWS_LAMBDA_RUNTIME_API}" ]; then
+  echo "Finishing lambda execution"
+  next-lambda-invocation
+fi
+
+exit 0

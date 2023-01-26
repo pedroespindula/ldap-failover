@@ -10,6 +10,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   ldap-utils \
   python3 \
   python3-pip \
+  cron \
+  vim \
  && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --upgrade pip && \
@@ -18,6 +20,8 @@ RUN pip3 install --upgrade pip && \
 COPY conf conf
 
 COPY entrypoint.sh entrypoint.sh
+
+COPY backup-ldap.sh backup-ldap.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
 

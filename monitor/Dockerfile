@@ -1,14 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:18.04 as base
 
-WORKDIR /detect-fail
-
-RUN echo 'slapd/root_password password password' | debconf-set-selections &&\
-  echo 'slapd/root_password_again password password' | debconf-set-selections
+WORKDIR /monitor
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   wget \
   unzip \
-  netcat \
   curl \
  && rm -rf /var/lib/apt/lists/*
 
@@ -18,13 +14,19 @@ RUN unzip terraform_1.0.0_linux_amd64.zip
 
 RUN mv terraform /usr/local/bin/
 
+COPY ./terraform/ ./terraform
+
+COPY ./monitor.sh .
+
+CMD ["./monitor.sh"]
+
+# APPLICATION IMAGE CONFIGURATIONS
+
+RUN echo 'slapd/root_password password password' | debconf-set-selections &&\
+  echo 'slapd/root_password_again password password' | debconf-set-selections
+
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   slapd \
   ldap-utils \
  && rm -rf /var/lib/apt/lists/*
 
-COPY ./terraform/ ./terraform
-
-COPY ./detect-fail.sh .
-
-CMD ["./detect-fail.sh"]

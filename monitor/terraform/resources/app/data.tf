@@ -12,8 +12,8 @@ data "terraform_remote_state" "repository" {
   config = {
     region         = "us-east-1"
     bucket         = "lsd-terraform-remote-state"
-    key            = "us-east-1/lsd/ldap/repository/terraform.tfstate"
-    dynamodb_table = "lsd-terraform-lock"
+    key            = "us-east-1/app/repository/terraform.tfstate"
+    dynamodb_table = "terraform-lock"
   }
 }
 
@@ -24,8 +24,8 @@ data "terraform_remote_state" "backup-bucket" {
   config = {
     region         = "us-east-1"
     bucket         = "lsd-terraform-remote-state"
-    key            = "us-east-1/lsd/ldap/backup-bucket/terraform.tfstate"
-    dynamodb_table = "lsd-terraform-lock"
+    key            = "us-east-1/app/backup-bucket/terraform.tfstate"
+    dynamodb_table = "terraform-lock"
   }
 }
 
